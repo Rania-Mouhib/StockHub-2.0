@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+StockHub - Profile
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Profile</h4>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <h5 class="card-header">Profile Details</h5>
+
+                    <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
+                        <div class="card-body demo-vertical-spacing demo-only-element">
+                            {% csrf_token %}
+                            <div class="mb-3 text-center">
+                                <img src="{{ user.avatar.url }}" alt="{{ user.username }} Avatar" class="rounded-circle" width="150">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="avatar">Change Avatar</label>
+                                <input type="file" class="form-control" id="avatar" name="avatar" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="password">New Password</label>
+                                <input type="password" class="form-control" id="password" name="password" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="confirm_password">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" />
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary me-2" style="background-color: #0e2157; color: white;">Save Changes</button>
+                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Additional Info (Optional) -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <h5 class="card-header">Account Information</h5>
+                    <div class="card-body">
+                        <p><strong>Role:</strong> {{ user.get_role_display }}</p>
+                        <p><strong>Status:</strong> {{ user.get_status_display }}</p>
+                        <p><strong>Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+                        <p><strong>Last Login:</strong> {{ user.last_login|date:"F j, Y, g:i a" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- / Content -->
+</div>
+{% endblock %}

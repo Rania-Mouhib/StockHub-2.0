@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}StockHub - Home{% endblock title %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row gy-4">
+            <!-- Centered Buttons -->
+            <div class="col-12 text-center mb-4">
+                <a href="{% url 'incoming:new' %}" class="btn btn-success me-2">Add New Incoming</a>
+                <a href="{% url 'outgoing:new' %}" class="btn btn-success">Add New Outgoing</a>
+            </div>
+
+            <!-- Last Incoming Item -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        Last Incoming Item
+                    </div>
+                    <div class="card-body">
+                        {% if last_incoming_item %}
+                        <h5 class="card-title">{{ last_incoming_item.model }} - {{ last_incoming_item.type }}</h5>
+                        <p class="card-text">
+                            <strong>Quantity:</strong> {{ last_incoming_item.quantity }}<br>
+                            <strong>Date:</strong> {{ last_incoming_item.date_in }}<br>
+                            <strong>Serial Number:</strong> {{ last_incoming_item.serial_number }}<br>
+                            <strong>Description:</strong> {{ last_incoming_item.description }}
+                        </p>
+                        {% else %}
+                        <p class="card-text">
+                            No incoming items found.
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Outgoing Item -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        Last Outgoing Item
+                    </div>
+                    <div class="card-body">
+                        {% if last_outgoing_item %}
+                        <h5 class="card-title">{{ last_outgoing_item.model }} - {{ last_outgoing_item.type }}</h5>
+                        <p class="card-text">
+                            <strong>Quantity:</strong> {{ last_outgoing_item.quantity }}<br>
+                            <strong>Date:</strong> {{ last_outgoing_item.date_out }}<br>
+                            <strong>Serial Number:</strong> {{ last_outgoing_item.serial_number }}<br>
+                            <strong>Description:</strong> {{ last_outgoing_item.description }}
+                        </p>
+                        {% else %}
+                        <p class="card-text">
+                            No outgoing items found.
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incoming Stock Chart -->
+            <div class="col-md-6 mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        Incoming Stock Overview
+                    </div>
+                    <div class="card-body">
+                        <canvas id="incomingChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outgoing Stock Chart -->
+            <div class="col-md-6 mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        Outgoing Stock Overview
+                    </div>
+                    <div class="card-body">
+                        <canvas id="outgoingChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Incoming Stock Chart
+        var incomingCtx = document.getElementById('incomingChart').getContext('2d');
+        new Chart(incomingCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ incoming_labels|safe }},
+                datasets: [{
+                    label: 'Incoming Quantity',
+                    data: {{ incoming_quantities|safe }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Outgoing Stock Chart
+        var outgoingCtx = document.getElementById('outgoingChart').getContext('2d');
+        new Chart(outgoingCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ outgoing_labels|safe }},
+                datasets: [{
+                    label: 'Outgoing Quantity',
+                    data: {{ outgoing_quantities|safe }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock extra_js %}
+{% endblock content %}

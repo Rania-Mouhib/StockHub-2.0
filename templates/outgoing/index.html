@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+StockHub - Outgoing Stock
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Outgoing Management /</span> Outgoing Stock</h4>
+        <div class="row gy-4">
+
+            <!-- Data Tables -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-truncate">Type</th>
+                                    <th class="text-truncate">Model</th>
+                                    <th class="text-truncate">Quantity</th>
+                                    <th class="text-truncate">Serial Number</th>
+                                    <th class="text-truncate">Description</th>
+                                    <th class="text-truncate">VNC</th>
+                                    <th class="text-truncate">BCI</th>
+                                    <th class="text-truncate">Plant</th>
+                                    <th class="text-truncate">Date Out</th>
+                                    <th class="text-truncate">Pilot</th>
+                                    <th class="text-truncate">Rack</th>
+                                    <th class="text-truncate">Comment</th>
+                                    <th class="text-truncate">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stock in outgoing_stock %}
+                                <tr>
+                                    <td class="text-truncate">{{ stock.type }}</td>
+                                    <td class="text-truncate">{{ stock.model }}</td>
+                                    <td class="text-truncate">{{ stock.quantity }}</td>
+                                    <td class="text-truncate">{{ stock.serial_number }}</td>
+                                    <td class="text-truncate">{{ stock.description }}</td>
+                                    <td class="text-truncate">{{ stock.vnc }}</td>
+                                    <td class="text-truncate">{{ stock.bci }}</td>
+                                    <td class="text-truncate">{{ stock.plant }}</td>
+                                    <td class="text-truncate">{{ stock.date_out|date:"F j, Y" }}</td>
+                                    <td class="text-truncate">{{ stock.pilot }}</td>
+                                    <td class="text-truncate">{{ stock.rack }}</td>
+                                    <td class="text-truncate">{{ stock.comment }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown">
+                                                <i class="mdi mdi-dots-vertical"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{% url 'outgoing:edit_article' stock.id %}"><i
+                                                        class="mdi mdi-pencil-outline me-1"></i> Edit</a>
+                                                <a class="dropdown-item" href="{% url 'outgoing:delete_article' stock.id %}"><i
+                                                        class="mdi mdi-trash-can-outline me-1"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ Data Tables -->
+    </div>
+</div>
+<!-- / Content -->
+{% endblock %}

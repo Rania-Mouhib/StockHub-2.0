@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Search Results for "{{ query }}"</h2>
+
+    <!-- Check if data is to be displayed in a table -->
+    {% if display_table %}
+        <!-- Display Incoming Articles Table -->
+        <h3>Incoming Articles</h3>
+        {% if incoming_results %}
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Model</th>
+                        <th>Type</th>
+                        <th>Serial Number</th>
+                        <th>Pilot</th>
+                        <th>Quantity</th>
+                        <th>Description</th>
+                        <th>VNC</th>
+                        <th>BCI</th>
+                        <th>Plant</th>
+                        <th>Date In</th>
+                        <th>Rack</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in incoming_results %}
+                        <tr>
+                            <td>{{ article.type }}</td>
+                            <td>{{ article.model }}</td>
+                            <td>{{ article.serial_number }}</td>
+                            <td>{{ article.pilot }}</td>
+                            <td>{{ article.quantity }}</td>
+                            <td>{{ article.description }}</td>
+                            <td>{{ article.vnc }}</td>
+                            <td>{{ article.bci }}</td>
+                            <td>{{ article.plant }}</td>
+                            <td>{{ article.date_in|date:"F j, Y" }}</td>
+                            <td>{{ article.rack }}</td>
+                            <td>{{ article.comment }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No incoming articles found.</p>
+        {% endif %}
+
+        <!-- Display Outgoing Articles Table -->
+        <h3>Outgoing Articles</h3>
+        {% if outgoing_results %}
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Type</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Serial Number</th>
+                        <th>Description</th>
+                        <th>VNC</th>
+                        <th>BCI</th>
+                        <th>Plant</th>
+                        <th>Date Out</th>
+                        <th>Pilot</th>
+                        <th>Rack</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in outgoing_results %}
+                        <tr>
+                            <td>{{ article.type }}</td>
+                            <td>{{ article.model }}</td>
+                            <td>{{ article.quantity }}</td>
+                            <td>{{ article.serial_number }}</td>
+                            <td>{{ article.description }}</td>
+                            <td>{{ article.vnc }}</td>
+                            <td>{{ article.bci }}</td>
+                            <td>{{ article.plant }}</td>
+                            <td>{{ article.date_out|date:"F j, Y" }}</td>
+                            <td>{{ article.pilot }}</td>
+                            <td>{{ article.rack }}</td>
+                            <td>{{ article.comment }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No outgoing articles found.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock content %}

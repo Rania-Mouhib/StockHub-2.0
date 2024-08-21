@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+StockHub - Add New Article
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Incoming Management /</span> Add New Article</h4>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <h5 class="card-header">New Article Form</h5>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card-body demo-vertical-spacing demo-only-element">
+                            
+                            <!-- Display errors -->
+                            {% if errors %}
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        {% for error in errors.values %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <label class="form-label" for="type">Type *</label>
+                                <input type="text" class="form-control" id="type" name="type" value="{{ form_data.type }}" ???? required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="model">Model *</label>
+                                <input type="text" class="form-control" id="model" name="model" value="{{ form_data.model }}" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="quantity">Quantity *</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" value="{{ form_data.quantity|default:1 }}" min="1" required />
+                            </div>
+                            
+
+                            <div class="mb-3">
+                                <label class="form-label" for="serial_number">Serial Number</label>
+                                <input type="text" class="form-control" id="serial_number" name="serial_number" value="{{ form_data.serial_number }}" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="description">Description</label>
+                                <input type="text" class="form-control" id="description" name="description" value="{{ form_data.description }}" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="vnc" class="form-label">VNC</label>
+                                <input type="number" class="form-control" id="vnc" name="vnc" step="1" min="0">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="bci">BCI</label>
+                                <input type="text" class="form-control" id="bci" name="bci" value="{{ form_data.bci }}" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="plant">Plant *</label>
+                                <select class="form-control" id="plant" name="plant" required>
+                                    <option value="" {% if not form_data.plant %}selected disabled{% endif %}>Select a plant</option>
+                                    <option value="BSK1" {% if form_data.plant == "BSK1" %}selected{% endif %}>BSK1</option>
+                                    <option value="BSK2" {% if form_data.plant == "BSK2" %}selected{% endif %}>BSK2</option>
+                                    <option value="BSK3" {% if form_data.plant == "BSK3" %}selected{% endif %}>BSK3</option>
+                                    <option value="BSK4" {% if form_data.plant == "BSK4" %}selected{% endif %}>BSK4</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="date_in">Date In *</label>
+                                <input type="date" class="form-control" id="date_in" name="date_in" value="{{ form_data.date_in }}" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="pilot">Pilot</label>
+                                <input type="text" class="form-control" id="pilot" name="pilot" value="{{ form_data.pilot }}" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="rack">Rack *</label>
+                                <select class="form-control" id="rack" name="rack" required>
+                                    <option value="" {% if not form_data.rack %}selected disabled{% endif %}>Select a rack</option>
+                                    <option value="A1" {% if form_data.rack == "A1" %}selected{% endif %}>A1</option>
+                                    <option value="A2" {% if form_data.rack == "A2" %}selected{% endif %}>A2</option>
+                                    <option value="A3" {% if form_data.rack == "A3" %}selected{% endif %}>A3</option>
+                                    <option value="A4" {% if form_data.rack == "A4" %}selected{% endif %}>A4</option>
+                                    <option value="A5" {% if form_data.rack == "A5" %}selected{% endif %}>A5</option>
+                                    <option value="A6" {% if form_data.rack == "A6" %}selected{% endif %}>A6</option>
+                                    <option value="B1" {% if form_data.rack == "B1" %}selected{% endif %}>B1</option>
+                                    <option value="B2" {% if form_data.rack == "B2" %}selected{% endif %}>B2</option>
+                                    <option value="B3" {% if form_data.rack == "B3" %}selected{% endif %}>B3</option>
+                                    <option value="B4" {% if form_data.rack == "B4" %}selected{% endif %}>B4</option>
+                                    <option value="B5" {% if form_data.rack == "B5" %}selected{% endif %}>B5</option>
+                                    <option value="B6" {% if form_data.rack == "B6" %}selected{% endif %}>B6</option>
+                                    <option value="C1" {% if form_data.rack == "C1" %}selected{% endif %}>C1</option>
+                                    <option value="C2" {% if form_data.rack == "C2" %}selected{% endif %}>C2</option>
+                                    <option value="C3" {% if form_data.rack == "C3" %}selected{% endif %}>C3</option>
+                                    <option value="C4" {% if form_data.rack == "C4" %}selected{% endif %}>C4</option>
+                                    <option value="C5" {% if form_data.rack == "C5" %}selected{% endif %}>C5</option>
+                                    <option value="C6" {% if form_data.rack == "C6" %}selected{% endif %}>C6</option>
+                                    <option value="D1" {% if form_data.rack == "D1" %}selected{% endif %}>D1</option>
+                                    <option value="D2" {% if form_data.rack == "D2" %}selected{% endif %}>D2</option>
+                                    <option value="D3" {% if form_data.rack == "D3" %}selected{% endif %}>D3</option>
+                                    <option value="D4" {% if form_data.rack == "D4" %}selected{% endif %}>D4</option>
+                                    <option value="D5" {% if form_data.rack == "D5" %}selected{% endif %}>D5</option>
+                                    <option value="D6" {% if form_data.rack == "D6" %}selected{% endif %}>D6</option>
+                                    <option value="E1" {% if form_data.rack == "E1" %}selected{% endif %}>E1</option>
+                                    <option value="E2" {% if form_data.rack == "E2" %}selected{% endif %}>E2</option>
+                                    <option value="E3" {% if form_data.rack == "E3" %}selected{% endif %}>E3</option>
+                                    <option value="E4" {% if form_data.rack == "E4" %}selected{% endif %}>E4</option>
+                                    <option value="E5" {% if form_data.rack == "E5" %}selected{% endif %}>E5</option>
+                                    <option value="E6" {% if form_data.rack == "E6" %}selected{% endif %}>E6</option>
+                                    <option value="F1" {% if form_data.rack == "F1" %}selected{% endif %}>F1</option>
+                                    <option value="F2" {% if form_data.rack == "F2" %}selected{% endif %}>F2</option>
+                                    <option value="F3" {% if form_data.rack == "F3" %}selected{% endif %}>F3</option>
+                                    <option value="F4" {% if form_data.rack == "F4" %}selected{% endif %}>F4</option>
+                                    <option value="F5" {% if form_data.rack == "F5" %}selected{% endif %}>F5</option>
+                                    <option value="F6" {% if form_data.rack == "F6" %}selected{% endif %}>F6</option>
+                                    <option value="G1" {% if form_data.rack == "G1" %}selected{% endif %}>G1</option>
+                                    <option value="G2" {% if form_data.rack == "G2" %}selected{% endif %}>G2</option>
+                                    <option value="G3" {% if form_data.rack == "G3" %}selected{% endif %}>G3</option>
+                                    <option value="G4" {% if form_data.rack == "G4" %}selected{% endif %}>G4</option>
+                                    <option value="G5" {% if form_data.rack == "G5" %}selected{% endif %}>G5</option>
+                                    <option value="G6" {% if form_data.rack == "G6" %}selected{% endif %}>G6</option>
+                                    <option value="H1" {% if form_data.rack == "H1" %}selected{% endif %}>H1</option>
+                                </select>
+                            </div>
+                            
+
+                            <div class="mb-3">
+                                <label class="form-label" for="comment">Comment</label>
+                                <input type="text" class="form-control" id="comment" name="comment" value="{{ form_data.comment }}" />
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary me-2" style="background-color: #0e2157; color: white;">Add Article</button>
+                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- / Content -->
+
+    <div class="content-backdrop fade"></div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('date_in').value = today;
+    });
+</script>
+{% endblock %}

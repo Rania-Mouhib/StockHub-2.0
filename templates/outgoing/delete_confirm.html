@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+StockHub - Delete Article
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Outgoing Management /</span> Delete Article</h4>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <h5 class="card-header">Delete Article</h5>
+
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+                        <p>Are you sure you want to delete the article with the following details?</p>
+                        <ul>
+                            <li><strong>Type:</strong> {{ article.type }}</li>
+                            <li><strong>Model:</strong> {{ article.model }}</li>
+                            <li><strong>Quantity:</strong> {{ article.quantity }}</li>
+                            <li><strong>Serial Number:</strong> {{ article.serial_number }}</li>
+                            <li><strong>Description:</strong> {{ article.description }}</li>
+                            <li><strong>VNC:</strong> {{ article.vnc }}</li>
+                            <li><strong>BCI:</strong> {{ article.bci }}</li>
+                            <li><strong>Plant:</strong> {{ article.plant }}</li>
+                            <li><strong>Date Out:</strong> {{ article.date_out }}</li>
+                            <li><strong>Pilot:</strong> {{ article.pilot }}</li>
+                            <li><strong>Rack:</strong> {{ article.rack }}</li>
+                            <li><strong>Comment:</strong> {{ article.comment }}</li>
+                        </ul>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <a href="{% url 'outgoing:outgoing' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
