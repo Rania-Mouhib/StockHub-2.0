@@ -6,7 +6,7 @@ from .models import MyUser
 from outgoing.models import Article as OutgoingItem
 from incoming.models import Article as IncomingItem
 from django.utils.dateparse import parse_date
-
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -60,9 +60,6 @@ def profile(request):
         if request.FILES.get('avatar'):
             user.avatar = request.FILES['avatar']
 
-        if request.POST.get('password') and request.POST.get('password') == request.POST.get('confirm_password'):
-            user.set_password(request.POST.get('password'))
-
         user.save()
         messages.success(request, 'Profile updated successfully.')
         return redirect('profile')
@@ -89,12 +86,10 @@ def user_list(request):
 
     for user in users:
         user_data.append({
-            'name': user.get_full_name() or user.username,
+            'name': user.name or user.username,
             'username': user.username,
             'is_superuser': user.is_superuser,
             'email': user.email,
-            'status': 'Active' if user.is_active else 'Inactive',
-            'status_label': 'success' if user.is_active else 'danger',
             'avatar': user.avatar or 'https://cdn.jsdelivr.net/gh/LahcenEzzara/stockhub-cdn@main/img/avatars/1.png'
         })
 
@@ -127,16 +122,14 @@ def new_user(request):
         email = request.POST['email']
         password = request.POST['password']
         role = request.POST['role']
-        status = request.POST['status']
+
 
         new_user = MyUser.objects.create_user(
             username=username,
             email=email,
             password=password,
-            first_name=name.split(' ')[0],  # Optional: if you want to separate first and last name
-            last_name=' '.join(name.split(' ')[1:]),  # Optional
+            name=name,
             is_superuser=(role == 'admin'),
-            is_active=(status == 'active'),
             avatar='avatars/default.png'
         )
 
@@ -205,6 +198,8 @@ def delete_account(request):
 
 
 
+from django.db.models import Q
+
 @login_required
 def search(request):
     query = request.GET.get('q', '')
@@ -212,23 +207,17 @@ def search(request):
 
     if query:
         incoming_results = IncomingItem.objects.filter(
-            type__icontains=query
-        ) | IncomingItem.objects.filter(
-            model__icontains=query
-        ) | IncomingItem.objects.filter(
-            serial_number__icontains=query
-        ) | IncomingItem.objects.filter(
-            pilot__icontains=query
+            Q(type__name__icontains=query) |  # Search in related Type's name
+            Q(model__name__icontains=query) |  # Search in related Model's name
+            Q(serial_number__icontains=query) |
+            Q(pilot__icontains=query)
         )
 
         outgoing_results = OutgoingItem.objects.filter(
-            type__icontains=query
-        ) | OutgoingItem.objects.filter(
-            model__icontains=query
-        ) | OutgoingItem.objects.filter(
-            serial_number__icontains=query
-        ) | OutgoingItem.objects.filter(
-            pilot__icontains=query
+            Q(type__name__icontains=query) |  # Search in related Type's name
+            Q(model__name__icontains=query) |  # Search in related Model's name
+            Q(serial_number__icontains=query) |
+            Q(pilot__icontains=query)
         )
     else:
         incoming_results = IncomingItem.objects.none()
@@ -240,6 +229,7 @@ def search(request):
         'incoming_results': incoming_results,
         'outgoing_results': outgoing_results,
     })
+
 
 @login_required
 def ticket(request):
@@ -269,19 +259,20 @@ def index(request):
     incoming_items = IncomingItem.objects.all().order_by('date_in')
     outgoing_items = OutgoingItem.objects.all().order_by('date_out')
 
-    incoming_labels = [item.type for item in incoming_items]
+    # Convert type instances to their name (string)
+    incoming_labels = [item.model.name for item in incoming_items]  # Get the name of the type for labels
     incoming_quantities = [item.quantity for item in incoming_items]
 
-    outgoing_labels = [item.type for item in outgoing_items]
+    outgoing_labels = [item.model.name for item in outgoing_items]  # Get the name of the type for labels
     outgoing_quantities = [item.quantity for item in outgoing_items]
 
     context = {
         'last_incoming_item': last_incoming_item,
         'last_outgoing_item': last_outgoing_item,
-        'incoming_labels': incoming_labels,
-        'incoming_quantities': incoming_quantities,
-        'outgoing_labels': outgoing_labels,
-        'outgoing_quantities': outgoing_quantities,
+        'incoming_labels': json.dumps(incoming_labels),  # Convert to JSON string
+        'incoming_quantities': json.dumps(incoming_quantities),  # Convert to JSON string
+        'outgoing_labels': json.dumps(outgoing_labels),  # Convert to JSON string
+        'outgoing_quantities': json.dumps(outgoing_quantities),  # Convert to JSON string
     }
 
     return render(request, 'index.html', context)

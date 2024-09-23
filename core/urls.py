@@ -25,6 +25,7 @@ urlpatterns = [
 
     path('incoming/', include('incoming.urls')),
     path('outgoing/', include('outgoing.urls')),
+    path('inventory/', include('inventory.urls')),
 ]
 
 if settings.DEBUG:

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'mgmt',
     'incoming',
     'outgoing',
+    'inventory',
 ]
 
 MIDDLEWARE = [

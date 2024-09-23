@@ -34,13 +34,24 @@ StockHub - Add New Article
                             {% endif %}
 
                             <div class="mb-3">
-                                <label class="form-label" for="type">Type *</label>
-                                <input type="text" class="form-control" id="type" name="type" value="{{ form_data.type }}" required />
+                                <label for="type">Type:</label>
+                                <select id="type" name="type">
+                                    <option value="" disabled selected>Select a type</option>
+                                    {% for type in types %}
+                                    <option value="{{ type.id }}">{{ type.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="model">Model *</label>
-                                <input type="text" class="form-control" id="model" name="model" value="{{ form_data.model }}" required />
+                                <label for="model">Model:</label>
+                                <select id="model" name="model">
+                                    <option value="" disabled selected>Select a model</option>
+                                    {% for model in models %}
+                                    <option value="{{ model.id }}">{{ model.name }}</option>
+                                    {% endfor %}
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
                             </div>
 
                             <div class="mb-3">
@@ -87,7 +98,7 @@ StockHub - Add New Article
 
                             <div class="mb-3">
                                 <label class="form-label" for="pilot">Pilot</label>
-                                <input type="text" class="form-control" id="pilot" name="pilot" value="{{ form_data.pilot }}" />
+                                <input type="text" class="form-control" id="pilot" name="pilot" value="{{ user.name }}" />
                             </div>
 
                             <div class="mb-3">
@@ -167,6 +178,30 @@ StockHub - Add New Article
     document.addEventListener("DOMContentLoaded", function() {
         var today = new Date().toISOString().split('T')[0];
         document.getElementById('date_out').value = today;
+        
+        $(document).ready(function() {
+            $('#type').change(function() {
+                var typeId = $(this).val();
+
+                $.ajax({
+                    url: '{% url "outgoing:update_models" %}',  // Use the namespace if defined
+                    data: {
+                        'type_id': typeId
+                    },
+                    success: function(data) {
+                        var modelSelect = $('#model');
+                        modelSelect.empty(); // Clear existing options
+
+                        $.each(data.models, function(index, model) {
+                            modelSelect.append($('<option>', {
+                                value: model.id,
+                                text: model.name
+                            }));
+                        });
+                    }
+                });
+            });
+        });
     });
 </script>
 {% endblock %}

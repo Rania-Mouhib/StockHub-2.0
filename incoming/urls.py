@@ -10,4 +10,5 @@ urlpatterns = [
     path('graph/', views.graph, name='graph'),
     path('edit/<int:id>/', views.edit_article, name='edit_article'),  
     path('delete/<int:id>/', views.delete_article, name='delete_article'),
+    path('update-models/', views.update_models, name='update_models'),
 ]

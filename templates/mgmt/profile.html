@@ -43,16 +43,6 @@ StockHub - Profile
                                 <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required />
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label" for="password">New Password</label>
-                                <input type="password" class="form-control" id="password" name="password" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="confirm_password">Confirm New Password</label>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" />
-                            </div>
-
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-primary me-2" style="background-color: #0e2157; color: white;">Save Changes</button>
                                 <button type="reset" class="btn btn-outline-secondary">Reset</button>
@@ -68,8 +58,15 @@ StockHub - Profile
                 <div class="card mb-4">
                     <h5 class="card-header">Account Information</h5>
                     <div class="card-body">
-                        <p><strong>Role:</strong> {{ user.get_role_display }}</p>
-                        <p><strong>Status:</strong> {{ user.get_status_display }}</p>
+                        <p><strong>Role:</strong> 
+                            {% if user.is_superuser %}
+                                Admin
+                            {% elif user.is_staff %}
+                                Admin
+                            {% else %}
+                                {{ user.get_role_display }}
+                            {% endif %}
+                        </p>
                         <p><strong>Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
                         <p><strong>Last Login:</strong> {{ user.last_login|date:"F j, Y, g:i a" }}</p>
                     </div>
